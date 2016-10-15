@@ -1,0 +1,18 @@
+# Ignore LaTeX intermediates
+*.pdf*
+*.pyg
+*.log
+*.out
+*.aux
+_minted-*/
+
+# Ignore vim backups files
+*.swp
+
+# Ignore compilation intermediates
+# JAVA
+*.jar
+# C/gcc/LLVM
+*.o
+# Python
+*.pyc
