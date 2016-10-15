@@ -99,6 +99,23 @@
 %% Patches (because this distro has an old version of LaTeX
 \usepackage{fixltx2e}
 
+%% BDDs
 \usepackage{pgf}
 \usepackage{tikz}
-\usetikzlibrary{arrows,automata}
+\usetikzlibrary{arrows,automata,shapes,positioning}
+\tikzset{%
+    zeroarrow/.style = {-stealth,dashed},
+    onearrow/.style = {-stealth,solid},
+    c/.style = {circle,draw,solid,minimum width=2em,
+        minimum height=2em},
+    r/.style = {rectangle,draw,solid,minimum width=2em,
+        minimum height=2em}
+}
+
+%% Logic functions
+\newcommand{\NOT}{\neg}
+\newcommand{\OR}{\lor}
+\newcommand{\AND}{\land}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\rightarrow}
+\newcommand{\BDDAND}{\text{BDD\_AND}}
