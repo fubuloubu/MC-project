@@ -1,1 +1,3 @@
-Comparision of BMC tool LLBMC and Symbolic Execution tool klee for C programs
+Comparision of BMC tool LLBMC and Symbolic Execution tool klee for C programs using LLVM (maybe on a linux driver or GNU tool)
+Comparision of several Model Checking tools on several standard benchmarks or Examples for Div By Zero, Race Conditions, Deadlocks
+Model checking of System C to RTL code generation (how good it is)
