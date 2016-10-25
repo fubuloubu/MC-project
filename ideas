@@ -1,3 +1,7 @@
 Comparision of BMC tool LLBMC and Symbolic Execution tool klee for C programs using LLVM (maybe on a linux driver or GNU tool)
+  GNU tool may be hard to find bugs
+  Linux piece might be easier to play with
 Comparision of several Model Checking tools on several standard benchmarks or Examples for Div By Zero, Race Conditions, Deadlocks
+  Better to do above
 Model checking of System C to RTL code generation (how good it is)
+  Could work, if a reasonable framework were decided. Input space is really big for compiler.
