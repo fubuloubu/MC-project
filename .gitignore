@@ -5,6 +5,9 @@
 *.out
 *.aux
 _minted-*/
+# BibTeX
+*.bbl
+*.blg
 
 # Ignore vim backups files
 *.swp
