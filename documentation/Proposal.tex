@@ -23,6 +23,7 @@
     \section{Abstract}
     %TODO
     % Description of project
+    \input{abstract.tex}
     
     \section{Background}
     %TODO
@@ -31,27 +32,39 @@
     % How it relates to course topics
     %
     % NOTE: Add figures TODO
+    \input{klee-description.tex}
+    \input{llbmc-description.tex}
     
     \section{Design Under Verification}
     %TODO
     % Background about software component under test
-    % Motivation
-    %
+    
+    \par
     % NOTE: You must disclose all sources that you intend to use
-    %       TODO: Sources and licensing for program under test,
-    %             as well as tools being tested
+    %       DONE: Sources and licensing for program under test,
+    %             as well as tools being testedi
+    The Linux Project and all contained software modules are governed under the GNU General
+    Public License (GPL), which says that the source if freely available to us to copy and change
+    for the purposes of this project, with the restriction that any work using the project
+    must not contain further restrictions and the source code must be made available.
+    We are distributing this project on GitHub, thereby fulfilling the relevant clauses of the GPL.
     %
     % NOTE: If your project is based on any of your own prior work, disclose as well
+    % N/A
 
     \section{Project Goals}
     %TODO
     % Describe project goals
-    % NOTE: If your proposal includes any steps that may fail, such as using a tool on your own
-    %       design or program, please include a plan-B (fallback) option. For example, a fallback
-    %       option for using a tool on your own design could be extending a design that comes with
-    %       the tool. TODO
+    The project seeks to test the driver mentioned above in a relevant context of proving
+    that the software module meets the intended design parameters and is free of all bugs
+    being tested, including concurrency and usage errors.
+    \par
+    %TODO
+    % Describe plan B
+    If we are unable to create a meaningful framework for testing the driver...
+    If we are unable to use the tools...
     
-    %TODO: Insert Bibliography
+    %DONE: Insert Bibliography
     \pagebreak
     \small
     \bibliography{bibliography.bib}{}

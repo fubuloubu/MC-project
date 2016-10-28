@@ -1,0 +1,24 @@
+Linux is the world’s most dominant operating system.
+Between 2005 and 2015, over 11,800 individual developers from both private companies
+and the general public contributed to the Linux kernel project.
+The rate of change in the kernel has been historically high and continues to increase,
+with over 10,000 patches going into each recent kernel release. \cite{linux}
+However, with the ubiquity of use and the increasing nature of it's development
+accelerating the project way past the ambitions of it's creator, Linus Torvalds,
+it is becoming an extremely important task to ensure the correctness of the software.
+Most importantly in the realm of security, as it's dominant role in the world's computing
+systems means that any flaw can be exploited by malacious attackers.
+No where in the codebase is this more imporant than in the hardware drivers present in
+the operating system, as those drivers have elevated permissions in the kernel
+that could easily allow an attacker to gain control of a system.
+\par
+Our project seeks to examine a moderately complex driver in the Linux Kernel 
+using two different tools, klee \cite{klee} and LLBMC \cite{llbmc} in order to verify
+correctness and freedom from bugs of the driver's code.
+While not comparative in functionality, both tools are modern examples of Formal 
+Verification tools that can be used to increase confidence in the correctness of software
+through automated formal methods.
+These tools contrast to more traditional methods of unit testing and functional testing
+(or sometimes simply analysis by senior developers or static analysis tools)
+typically employed on the drivers in the linux kernal, which may not be capturing the whole
+story, or may be missing more complex failures of logic or concurrency which are hard to discover.
