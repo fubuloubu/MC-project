@@ -1,1 +1,28 @@
 \subsection{Description of KLEE Tool}
+KLEE is a modern symbolic execution tool, capable of automatically generating test cases that 
+achieve high coverage on a diverse set of complex and environmentally-intensive programs.
+It can be used in a variety of ways to generate coverage tests, find bugs, and cross-check program
+consistency.\cite{kleepaper}
+KLEE works by running programs symbolically: unlike normal execution,
+where operations along an execution path would produce concrete values from their operands,
+KLEE will instead generate constraints that exactly describe the set of values possible
+on that given path.
+When KLEE detects an error or when a path reaches an exit call, 
+KLEE will solve for the current path’s constraints (called its path condition)
+and produce a test case where the program will follow the same path when rerun 
+on an unmodified version of the checked program (complied without KLEE support).
+\par
+Our usage of KLEE in our project is to automatically generate tests cases for our
+driver, with the maximum coverage possible.
+This may be difficult in practice, as the driver uses Kernel API calls and other
+runtime assumptions that may not exist if the code is extracted from the relevant code in
+the Linux Kernel or referenced libraries required to run.
+A test harness may have to be created around the code under test to ensure no issues
+stop KLEE from doing what it needs to do.
+\par
+Once the test cases are generated, the test cases will be analyzed for any
+potential exceptional behavior uncovered as well as for complete coverage of the 
+anticipated scenarios the driver is supposed to run in.
+A goal for coverage of our chosen driver would be 85\%, any less would not sufficiently
+show that path analysis of the code would useful results in practice.
+Coverage would be measured using the \textit{gcov} tool, which meaasures line coverage.
