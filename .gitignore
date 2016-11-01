@@ -12,6 +12,9 @@ _minted-*/
 # Ignore vim backups files
 *.swp
 
+# aspell backups
+*.bak
+
 # Ignore compilation intermediates
 # JAVA
 *.jar
