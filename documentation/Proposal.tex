@@ -21,7 +21,7 @@
 
 \begin{document}
     \section{Abstract}
-    %TODO
+    %DONE
     % Description of project
     \input{abstract.tex}
     
@@ -38,13 +38,14 @@
     \section{Design Under Verification}
     %TODO
     % Background about software component under test
+    %\input{hidusb-description.tex}
     
     \par
     % NOTE: You must disclose all sources that you intend to use
     %       DONE: Sources and licensing for program under test,
     %             as well as tools being testedi
     The Linux Project and all contained software modules are governed under the GNU General
-    Public License (GPL), which says that the source if freely available to us to copy and change
+    Public License (GPL), which states that the source is freely available to copy and/or change
     for the purposes of this project, with the restriction that any work using the project
     must not contain further restrictions and the source code must be made available.
     We are distributing this project on GitHub, thereby fulfilling the relevant clauses of the GPL.
@@ -61,8 +62,14 @@
     \par
     %TODO
     % Describe plan B
-    If we are unable to create a meaningful framework for testing the driver...
-    If we are unable to use the tools...
+    If we are unable to create a meaningful framework for testing the driver, we
+    will resort to testing a piece of software that one of the team members has developed.
+    The following is a description of the VisLang compiler that Bryant Eisenbach developed
+    for COMS W4115 (Programming Languages and Translators) in Summer 2015 using the OCaml
+    programming language (which has LLVM bindings for a compilation target).
+    This project will be used as a Plan B.
+    \par
+    \input{vislang-compiler-description.tex}
     
     %DONE: Insert Bibliography
     \pagebreak
