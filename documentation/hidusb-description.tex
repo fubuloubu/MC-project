@@ -1,0 +1,22 @@
+\subsection{Design Under Verification}
+Based on prior work\cite{usbkbd}, we intend on verifying a section of the Linux kernel
+that contains kernel modules related to USB Human Input Devices (HID).
+These modules are used to interact with HID devices in order to provide a bridge layer
+to the input kernal module.
+This area of kernel design is an important design to test as it is an active vector
+for physical attacks on a computing system.
+\par
+We intend to test usbmouse.c first \cite{usbhid}, 
+which is a complex program of just over 200 sloc that interacts with the kernelspace using
+the Linux Kernel API.
+Per the prior work, we see that there is a need to build a framework around this kernel module
+in order for it to instantiate properly, so work will need to be done to properly construct
+this framework.
+\par
+% DONE: Sources and licensing for program under test,
+%       as well as tools being tested
+The Linux Project and all contained software modules are governed under the GNU General
+Public License (GPL), which states that the source is freely available to copy and/or change
+for the purposes of this project, with the restriction that any work using the project
+must not contain further restrictions and the source code must be made available.
+We are distributing this project on GitHub, thereby fulfilling the relevant clauses of the GPL.
