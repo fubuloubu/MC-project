@@ -33,7 +33,5 @@ ifeq ($(shell $(QUERY_ENV)),$(CONTAINER_NAME))
 	@echo "DESTROY $(CONTAINER_NAME)"
 	@$(CLEANUP_ENV)
 endif
-	@echo " CLEAN klee"
-	@rm -f *.bc
-	@rm -f klee-last
-	@rm -rf klee-out-*
+	@echo " CLEAN klee/.gitignore"
+	@grep -v "#\|^\$$" .gitignore | while read line; do rm -rf $$line; done
