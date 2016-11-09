@@ -1,0 +1,4 @@
+# KLEE Intermediates
+*.bc
+klee-last
+klee-out-*/
