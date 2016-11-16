@@ -31,7 +31,10 @@ CLANG=clang $(CLANG_FLAGS)
 	@$(ENV_EXECUTE) $(CLANG) $(TARGET_DIR)/$< -o $(TARGET_DIR)/$@
 
 # Setup klee to generate test cases
-KLEE=klee --libc=uclibc --posix-runtime
+KLEE_FLAGS =--libc=uclibc
+# klee can't handle this argument when there are <2 arguments
+#KLEE_FLAGS+=--posix-runtime
+KLEE=klee $(KLEE_FLAGS)
 
 # Run klee to get test cases and execute them
 %.results: %.bc $(CONTAINER_NAME)
