@@ -20,5 +20,7 @@ _minted-*/
 *.jar
 # C/gcc/LLVM
 *.o
+*.bc
+
 # Python
 *.pyc
