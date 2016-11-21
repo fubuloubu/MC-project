@@ -1,34 +1,39 @@
-# Starting from Current Directory
-STARTDIR=$(shell pwd)
-
-# Building in this directory
-BUILDDIR=/usr/src/linux-headers-4.4.0-47-generic
-
-# Starter
+# Start with fresh variable
 BCFLAGS=
 
 # These are all the flags that linux make constructed, but are now unused
 #BCFLAGS+=-Wp,-MD,$(STARTDIR)/.usbmouse.o.d
 
-# Unsupported by clang 3.8
+# These flags are unsupported by clang 3.8
 #BCFLAGS+=-falign-jumps=1
 #BCFLAGS+=-falign-loops=1
 #BCFLAGS+=-fno-delete-null-pointer-checks
 
 # These are all the flags that linux make constructed, but seem required
-# Include directories NOTE: order matters!
+
+# Do not search the standard system directories 
+# or compiler builtin directories for include files
 BCFLAGS+=-nostdinc
+
+# Include clang headers as system headers
 BCFLAGS+=-isystem /usr/lib/llvm-3.8/lib/clang/3.8.0/include
-BCFLAGS+=-I$(BUILDDIR)/arch/x86/include
-BCFLAGS+=-I$(BUILDDIR)/arch/x86/include/generated/uapi
-BCFLAGS+=-I$(BUILDDIR)/arch/x86/include/generated
-BCFLAGS+=-I$(BUILDDIR)/include
-BCFLAGS+=-I$(BUILDDIR)/arch/x86/include/uapi
-BCFLAGS+=-I$(BUILDDIR)/arch/x86/include/generated/uapi
-BCFLAGS+=-I$(BUILDDIR)/include/uapi
-BCFLAGS+=-I$(BUILDDIR)/include/generated/uapi
-BCFLAGS+=-I$(BUILDDIR)/ubuntu/include
-BCFLAGS+=-include $(BUILDDIR)/include/linux/kconfig.h
+
+# Building in this directory
+LINUXDIR=/usr/src/linux-headers-4.4.0-47-generic
+
+# Include directories for compiling linux
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/generated/uapi
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/generated
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/uapi
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/generated/uapi
+BCFLAGS+=-I$(LINUXDIR)/include
+BCFLAGS+=-I$(LINUXDIR)/include/uapi
+BCFLAGS+=-I$(LINUXDIR)/include/generated/uapi
+BCFLAGS+=-I$(LINUXDIR)/ubuntu/include
+
+# Linux Pre-compiled Header NOTE: Must be after other includes
+BCFLAGS+=-include $(LINUXDIR)/include/linux/kconfig.h
 
 # Macro flags
 BCFLAGS+=-D__KERNEL__
@@ -120,7 +125,7 @@ BCFLAGS+=-emit-llvm
 
 %.bc: %.c
 	@echo "  CLANG $<"
-	@cd $(BUILDDIR) && clang $(BCFLAGS) -o $(STARTDIR)/$@ $(STARTDIR)/$^
+	@clang $(BCFLAGS) -o $@ $^
 
 .PHONY: clean
 clean:
