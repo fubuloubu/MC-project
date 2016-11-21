@@ -9,6 +9,9 @@ BCFLAGS=
 #BCFLAGS+=-falign-loops=1
 #BCFLAGS+=-fno-delete-null-pointer-checks
 
+# These flags are unsupported by clang 3.4
+#BCFLAGS+=-fstack-protector-strong
+
 # These are all the flags that linux make constructed, but seem required
 
 # Do not search the standard system directories 
@@ -19,7 +22,7 @@ BCFLAGS+=-nostdinc
 BCFLAGS+=-isystem /usr/lib/llvm-3.8/lib/clang/3.8.0/include
 
 # Building in this directory
-LINUXDIR=/usr/src/linux-headers-4.4.0-47-generic
+LINUXDIR=/usr/src/linux-headers-`uname -r`
 
 # Include directories for compiling linux
 BCFLAGS+=-I$(LINUXDIR)/arch/x86/include
@@ -72,7 +75,6 @@ BCFLAGS+=-fno-common
 BCFLAGS+=-fno-pie
 BCFLAGS+=-funit-at-a-time
 BCFLAGS+=-fno-asynchronous-unwind-tables
-BCFLAGS+=-fstack-protector-strong
 BCFLAGS+=-fno-omit-frame-pointer
 BCFLAGS+=-fno-optimize-sibling-calls
 BCFLAGS+=-fno-strict-overflow
