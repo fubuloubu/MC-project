@@ -17,17 +17,36 @@ BCFLAGS=
 
 # These are all the flags that linux make constructed, but seem required
 # Include directories NOTE: order matters!
-BCFLAGS+=-isystem /usr/lib/llvm-3.8/bin/../lib/clang/3.8.0/include
-BCFLAGS+=-I./arch/x86/include
-BCFLAGS+=-Iarch/x86/include/generated/uapi
-BCFLAGS+=-Iarch/x86/include/generated
-BCFLAGS+=-Iinclude
-BCFLAGS+=-I./arch/x86/include/uapi
-BCFLAGS+=-Iarch/x86/include/generated/uapi
-BCFLAGS+=-I./include/uapi
-BCFLAGS+=-Iinclude/generated/uapi
-BCFLAGS+=-Iubuntu/include
-BCFLAGS+=-include ./include/linux/kconfig.h
+BCFLAGS+=-nostdinc
+BCFLAGS+=-isystem /usr/lib/llvm-3.8/lib/clang/3.8.0/include
+BCFLAGS+=-I$(BUILDDIR)/arch/x86/include
+BCFLAGS+=-I$(BUILDDIR)/arch/x86/include/generated/uapi
+BCFLAGS+=-I$(BUILDDIR)/arch/x86/include/generated
+BCFLAGS+=-I$(BUILDDIR)/include
+BCFLAGS+=-I$(BUILDDIR)/arch/x86/include/uapi
+BCFLAGS+=-I$(BUILDDIR)/arch/x86/include/generated/uapi
+BCFLAGS+=-I$(BUILDDIR)/include/uapi
+BCFLAGS+=-I$(BUILDDIR)/include/generated/uapi
+BCFLAGS+=-I$(BUILDDIR)/ubuntu/include
+BCFLAGS+=-include $(BUILDDIR)/include/linux/kconfig.h
+
+# Macro flags
+BCFLAGS+=-D__KERNEL__
+BCFLAGS+=-DCONFIG_X86_X32_ABI
+BCFLAGS+=-DCONFIG_AS_CFI=1
+BCFLAGS+=-DCONFIG_AS_CFI_SIGNAL_FRAME=1
+BCFLAGS+=-DCONFIG_AS_CFI_SECTIONS=1
+BCFLAGS+=-DCONFIG_AS_FXSAVEQ=1
+BCFLAGS+=-DCONFIG_AS_SSSE3=1
+BCFLAGS+=-DCONFIG_AS_CRC32=1
+BCFLAGS+=-DCONFIG_AS_AVX=1
+BCFLAGS+=-DCONFIG_AS_AVX2=1
+BCFLAGS+=-DCONFIG_AS_SHA1_NI=1
+BCFLAGS+=-DCONFIG_AS_SHA256_NI=1
+BCFLAGS+=-DMODULE
+BCFLAGS+=-D"KBUILD_STR(s)=\#s"
+BCFLAGS+=-D"KBUILD_BASENAME=KBUILD_STR(usbmouse)"
+BCFLAGS+=-D"KBUILD_MODNAME=KBUILD_STR(usbmouse)"
 
 # Machine Dependant options
 BCFLAGS+=-mno-sse
@@ -54,7 +73,6 @@ BCFLAGS+=-fno-optimize-sibling-calls
 BCFLAGS+=-fno-strict-overflow
 
 BCFLAGS+=-Qunused-arguments
-BCFLAGS+=-nostdinc
 BCFLAGS+=-std=gnu89
 BCFLAGS+=-pipe
 BCFLAGS+=--param=allow-store-data-races=0
@@ -90,24 +108,6 @@ BCFLAGS+=-Wno-unknown-warning-option
 BCFLAGS+=-Wno-sign-compare
 BCFLAGS+=-Wno-format-zero-length
 BCFLAGS+=-Wno-uninitialized
-
-# Macro flags
-BCFLAGS+=-D__KERNEL__
-BCFLAGS+=-DCONFIG_X86_X32_ABI
-BCFLAGS+=-DCONFIG_AS_CFI=1
-BCFLAGS+=-DCONFIG_AS_CFI_SIGNAL_FRAME=1
-BCFLAGS+=-DCONFIG_AS_CFI_SECTIONS=1
-BCFLAGS+=-DCONFIG_AS_FXSAVEQ=1
-BCFLAGS+=-DCONFIG_AS_SSSE3=1
-BCFLAGS+=-DCONFIG_AS_CRC32=1
-BCFLAGS+=-DCONFIG_AS_AVX=1
-BCFLAGS+=-DCONFIG_AS_AVX2=1
-BCFLAGS+=-DCONFIG_AS_SHA1_NI=1
-BCFLAGS+=-DCONFIG_AS_SHA256_NI=1
-BCFLAGS+=-DMODULE
-BCFLAGS+=-D"KBUILD_STR(s)=\#s"
-BCFLAGS+=-D"KBUILD_BASENAME=KBUILD_STR(usbmouse)"
-BCFLAGS+=-D"KBUILD_MODNAME=KBUILD_STR(usbmouse)"
 
 # Added to suppress unused function warnings
 BCFLAGS+=-Wno-unused-function
