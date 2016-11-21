@@ -10,7 +10,13 @@ BCFLAGS=
 # These are all the flags that linux make constructed, but are now unused
 #BCFLAGS+=-Wp,-MD,$(STARTDIR)/.usbmouse.o.d
 
+# Unsupported by clang 3.8
+#BCFLAGS+=-falign-jumps=1
+#BCFLAGS+=-falign-loops=1
+#BCFLAGS+=-fno-delete-null-pointer-checks
+
 # These are all the flags that linux make constructed, but seem required
+# Include directories NOTE: order matters!
 BCFLAGS+=-isystem /usr/lib/llvm-3.8/bin/../lib/clang/3.8.0/include
 BCFLAGS+=-I./arch/x86/include
 BCFLAGS+=-Iarch/x86/include/generated/uapi
@@ -23,6 +29,7 @@ BCFLAGS+=-Iinclude/generated/uapi
 BCFLAGS+=-Iubuntu/include
 BCFLAGS+=-include ./include/linux/kconfig.h
 
+# Machine Dependant options
 BCFLAGS+=-mno-sse
 BCFLAGS+=-mno-mmx
 BCFLAGS+=-mno-sse2
@@ -34,15 +41,13 @@ BCFLAGS+=-mno-red-zone
 BCFLAGS+=-mcmodel=kernel
 BCFLAGS+=-mno-global-merge
 
+# Clang configuration flags
 BCFLAGS+=-fno-pie
 BCFLAGS+=-fno-strict-aliasing
 BCFLAGS+=-fno-common
 BCFLAGS+=-fno-pie
-BCFLAGS+=-falign-jumps=1
-BCFLAGS+=-falign-loops=1
 BCFLAGS+=-funit-at-a-time
 BCFLAGS+=-fno-asynchronous-unwind-tables
-BCFLAGS+=-fno-delete-null-pointer-checks
 BCFLAGS+=-fstack-protector-strong
 BCFLAGS+=-fno-omit-frame-pointer
 BCFLAGS+=-fno-optimize-sibling-calls
@@ -54,8 +59,11 @@ BCFLAGS+=-std=gnu89
 BCFLAGS+=-pipe
 BCFLAGS+=--param=allow-store-data-races=0
 BCFLAGS+=-pg
+
+# Optimization level
 BCFLAGS+=-O2
 
+# Warnings
 BCFLAGS+=-Wno-unknown-warning-option
 BCFLAGS+=-Wall
 BCFLAGS+=-Wundef
@@ -83,6 +91,7 @@ BCFLAGS+=-Wno-sign-compare
 BCFLAGS+=-Wno-format-zero-length
 BCFLAGS+=-Wno-uninitialized
 
+# Macro flags
 BCFLAGS+=-D__KERNEL__
 BCFLAGS+=-DCONFIG_X86_X32_ABI
 BCFLAGS+=-DCONFIG_AS_CFI=1
@@ -100,10 +109,17 @@ BCFLAGS+=-D"KBUILD_STR(s)=\#s"
 BCFLAGS+=-D"KBUILD_BASENAME=KBUILD_STR(usbmouse)"
 BCFLAGS+=-D"KBUILD_MODNAME=KBUILD_STR(usbmouse)"
 
+# Added to suppress unused function warnings
+BCFLAGS+=-Wno-unused-function
+
+# Compiler stage (originally -c) TODO: Try -S
 BCFLAGS+=-c
 
-usbmouse.bc:
-	cd $(BUILDDIR) && clang $(BCFLAGS) -emit-llvm -o $(STARTDIR)/usbmouse.bc $(STARTDIR)/usbmouse.c
+# Generate Bytecode (and store in file -o)
+BCFLAGS+=-emit-llvm
+
+%.bc: %.c
+	cd $(BUILDDIR) && clang $(BCFLAGS) -o $(STARTDIR)/$@ $(STARTDIR)/$^
 
 .PHONY: clean
 clean:
