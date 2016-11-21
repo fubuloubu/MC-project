@@ -1,7 +1,7 @@
 include bcflags.mk
 
-# Compiler stage (originally -c) TODO: Try -S
-BCFLAGS+=-c
+# Compiler stage (originally -c)
+BCFLAGS+=-S
 
 # Generate Bytecode (and store in file -o)
 BCFLAGS+=-emit-llvm
