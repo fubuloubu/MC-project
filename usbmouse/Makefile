@@ -119,8 +119,10 @@ BCFLAGS+=-c
 BCFLAGS+=-emit-llvm
 
 %.bc: %.c
-	cd $(BUILDDIR) && clang $(BCFLAGS) -o $(STARTDIR)/$@ $(STARTDIR)/$^
+	@echo "  CLANG $<"
+	@cd $(BUILDDIR) && clang $(BCFLAGS) -o $(STARTDIR)/$@ $(STARTDIR)/$^
 
 .PHONY: clean
 clean:
-	rm -f usbmouse.bc 
+	@echo "  CLEAN clang"
+	@rm -f usbmouse.bc 
