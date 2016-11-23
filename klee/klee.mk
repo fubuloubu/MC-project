@@ -30,6 +30,10 @@ $(INSTANCE_NAME): $(if $(CONTAINER_EXISTS),,build)
 # Command to execute inside environment
 ENV_EXECUTE=$(DOCKER) exec $(INSTANCE_NAME)
 
+# Setup clang with linux kernel flags
+#include ../usbmouse/bcflags.mk
+#CLANG_FLAGS+=$(BCFLAGS)
+
 # Setup clang to generate bytecode for use with klee
 CLANG_FLAGS+=-I /home/klee/klee_src/include/
 CLANG_FLAGS+=-emit-llvm
