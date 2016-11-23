@@ -24,7 +24,7 @@ LLVM_VER =$(shell echo $(CLANG_VER) | grep -o "^[0-9].[0-9]")
 BCFLAGS+=-isystem /usr/lib/llvm-$(LLVM_VER)/lib/clang/$(CLANG_VER)/include
 
 # Building in this directory
-LINUXDIR=/usr/src/linux-headers-`uname -r`
+LINUXDIR=/usr/src/linux-headers-$(shell uname -r)
 
 # Include directories for compiling linux
 BCFLAGS+=-I$(LINUXDIR)/arch/x86/include
