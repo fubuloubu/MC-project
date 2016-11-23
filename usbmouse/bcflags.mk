@@ -19,7 +19,9 @@ BCFLAGS=
 BCFLAGS+=-nostdinc
 
 # Include clang headers as system headers
-BCFLAGS+=-isystem /usr/lib/llvm-3.8/lib/clang/3.8.0/include
+CLANG_VER=$(shell clang --version | grep version | grep -o "[0-9].[0-9].[0-9]")
+LLVM_VER =$(shell echo $(CLANG_VER) | grep -o "^[0-9].[0-9]")
+BCFLAGS+=-isystem /usr/lib/llvm-$(LLVM_VER)/lib/clang/$(CLANG_VER)/include
 
 # Building in this directory
 LINUXDIR=/usr/src/linux-headers-`uname -r`
