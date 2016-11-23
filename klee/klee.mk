@@ -2,21 +2,32 @@ IGNORE=/dev/null
 
 # Makefile for using klee with docker
 DOCKER=docker
+CONTAINER_NAME=klee/klee:linux
+CONTAINER_EXISTS=$(shell $(DOCKER) images | grep "$(subst :, *,$(CONTAINER_NAME))")
+
+.PHONY: build
+build:
+	@echo " BUILD $(CONTAINER_NAME)"
+	@ln -s /usr/src/linux-headers-$(shell uname -r)/ linux-headers
+	@$(if $(CONTAINER_EXISTS),$(DOCKER) rmi $(CONTAINER_NAME) >$(IGNORE))
+	@rm -f linux-headers
+	@$(DOCKER) build -t "$(CONTAINER_NAME)" . >$(IGNORE)
+
 START_DIR=$(shell pwd)
 TARGET_DIR=/home/klee/test
-CONTAINER_NAME=klee_test
+INSTANCE_NAME=klee_test
 
 # Rule for creating environment (NOTE: keep persistant)
-.SECONDARY: $(CONTAINER_NAME)
-$(CONTAINER_NAME):
-	@echo " CREATE $(CONTAINER_NAME)"
-	@$(DOCKER) run -v $(START_DIR):$(TARGET_DIR) \
-		-it -d --name=$(CONTAINER_NAME) \
-		klee/klee 2>$(IGNORE) >$(IGNORE)
+.SECONDARY: $(INSTANCE_NAME)
+$(INSTANCE_NAME): $(if $(CONTAINER_EXISTS),,build)
+	@echo " CREATE $(INSTANCE_NAME)"
+	@$(DOCKER) run -v /usr/src/linux-headers-`uname -r`/ \
+		-it -d --name=$(INSTANCE_NAME) $(CONTAINER_NAME) \
+		2>$(IGNORE) >$(IGNORE)
 	@touch $@
 
 # Command to execute inside environment
-ENV_EXECUTE=$(DOCKER) exec $(CONTAINER_NAME)
+ENV_EXECUTE=$(DOCKER) exec $(INSTANCE_NAME)
 
 # Setup clang to generate bytecode for use with klee
 CLANG_FLAGS+=-I /home/klee/klee_src/include/
@@ -25,18 +36,18 @@ CLANG_FLAGS+=-c
 CLANG=clang $(CLANG_FLAGS)
 
 # Generate LLVM bytecode for use with klee
-%.bc: %.c $(CONTAINER_NAME)
+%.bc: %.c $(INSTANCE_NAME)
 	@echo "  CLANG $<"
 	@$(ENV_EXECUTE) $(CLANG) $(TARGET_DIR)/$< -o $(TARGET_DIR)/$@
 
 # Setup klee to generate test cases
-KLEE_FLAGS =--libc=uclibc
+KLEE_FLAGS=--libc=uclibc
 # klee can't handle this argument when there are <2 arguments
 #KLEE_FLAGS+=--posix-runtime
 KLEE=klee $(KLEE_FLAGS)
 
 # Run klee to get test cases and execute them
-%.results: %.bc $(CONTAINER_NAME)
+%.results: %.bc $(INSTANCE_NAME)
 	@echo "   KLEE $<"
 	@$(ENV_EXECUTE) $(KLEE) $(TARGET_DIR)/$< 2>$(IGNORE)
 	@cd klee-out-0 && for file in test*.ktest; do \
@@ -46,15 +57,15 @@ KLEE=klee $(KLEE_FLAGS)
 
 # Remove environment
 destroy_env:
-	@echo "DESTROY $(CONTAINER_NAME)"
-	@$(DOCKER) stop $(CONTAINER_NAME) 2>$(IGNORE) >$(IGNORE)
-	@$(DOCKER) rm   $(CONTAINER_NAME) 2>$(IGNORE) >$(IGNORE)
-	@rm $(CONTAINER_NAME)
+	@echo "DESTROY $(INSTANCE_NAME)"
+	@$(DOCKER) stop $(INSTANCE_NAME) 2>$(IGNORE) >$(IGNORE)
+	@$(DOCKER) rm   $(INSTANCE_NAME) 2>$(IGNORE) >$(IGNORE)
+	@rm $(INSTANCE_NAME)
 
 # Clean rule:
 # clean using executeable lines of .gitignore file
 .PHONY: clean
 clean:
-	@if [ -f $(CONTAINER_NAME) ]; then $(MAKE) -s destroy_env; fi
+	@if [ -f $(INSTANCE_NAME) ]; then $(MAKE) -s destroy_env; fi
 	@echo "  CLEAN klee/.gitignore"
 	@grep -v "#\|^\$$" .gitignore | while read line; do rm -rf $$line; done
