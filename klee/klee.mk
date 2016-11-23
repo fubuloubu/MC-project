@@ -21,7 +21,8 @@ INSTANCE_NAME=klee_test
 .SECONDARY: $(INSTANCE_NAME)
 $(INSTANCE_NAME): $(if $(CONTAINER_EXISTS),,build)
 	@echo " CREATE $(INSTANCE_NAME)"
-	@$(DOCKER) run -v /usr/src/linux-headers-`uname -r`/ \
+	@$(DOCKER) run -v $(shell pwd):$(TARGET_DIR) \
+		-v /usr/src/linux-headers-`uname -r`/ \
 		-it -d --name=$(INSTANCE_NAME) $(CONTAINER_NAME) \
 		2>$(IGNORE) >$(IGNORE)
 	@touch $@
