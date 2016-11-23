@@ -19,10 +19,9 @@ $(CONTAINER_NAME):
 ENV_EXECUTE=$(DOCKER) exec $(CONTAINER_NAME)
 
 # Setup clang to generate bytecode for use with klee
-CLANG_FLAGS =-c
-CLANG_FLAGS+=-g
-CLANG_FLAGS+=-emit-llvm
 CLANG_FLAGS+=-I /home/klee/klee_src/include/
+CLANG_FLAGS+=-emit-llvm
+CLANG_FLAGS+=-c
 CLANG=clang $(CLANG_FLAGS)
 
 # Generate LLVM bytecode for use with klee
