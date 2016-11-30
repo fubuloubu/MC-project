@@ -19,22 +19,23 @@ BCFLAGS=
 BCFLAGS+=-nostdinc
 
 # Include clang headers as system headers
-CLANG_VER=$(shell clang --version | grep version | grep -o "[0-9].[0-9].[0-9]")
-LLVM_VER =$(shell echo $(CLANG_VER) | grep -o "^[0-9].[0-9]")
+# NOTE: Bash env used so it executes in running enviroment
+CLANG_VER=$$(clang --version | grep version | grep -o "[0-9].[0-9].[0-9]")
+LLVM_VER =$$(clang --version | grep version | grep -o "[0-9].[0-9].[0-9]" | grep -o "^[0-9].[0-9]")
 BCFLAGS+=-isystem /usr/lib/llvm-$(LLVM_VER)/lib/clang/$(CLANG_VER)/include
 
 # Building in this directory
-LINUXDIR=/usr/src/linux-headers-$(shell uname -r)
+# NOTE: Bash env used so it executes in running enviroment
+LINUXDIR=/usr/src/linux-headers-$$(uname -r)
 
 # Include directories for compiling linux
-BCFLAGS+=-I$(LINUXDIR)/arch/x86/include
-BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/generated/uapi
-BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/generated
-BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/uapi
-BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/generated/uapi
 BCFLAGS+=-I$(LINUXDIR)/include
 BCFLAGS+=-I$(LINUXDIR)/include/uapi
 BCFLAGS+=-I$(LINUXDIR)/include/generated/uapi
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/generated
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/uapi
+BCFLAGS+=-I$(LINUXDIR)/arch/x86/include/generated/uapi
 BCFLAGS+=-I$(LINUXDIR)/ubuntu/include
 
 # Linux Pre-compiled Header NOTE: Must be after other includes
