@@ -8,9 +8,7 @@ CONTAINER_EXISTS=$(shell $(DOCKER) images | grep "$(subst :, *,$(CONTAINER_NAME)
 .PHONY: build
 build:
 	@echo " BUILD $(CONTAINER_NAME)"
-	@ln -s /usr/src/linux-headers-$(shell uname -r)/ linux-headers
 	@$(if $(CONTAINER_EXISTS),$(DOCKER) rmi $(CONTAINER_NAME) >$(IGNORE))
-	@rm -f linux-headers
 	@$(DOCKER) build -t "$(CONTAINER_NAME)" . >$(IGNORE)
 
 START_DIR=$(shell pwd)
