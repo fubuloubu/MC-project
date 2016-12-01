@@ -1,15 +1,15 @@
 struct urb {
    context;
    signed char status; 
-}
+};
 
 struct usb_device {
     devpath;
-}
+};
 
 struct input_dev {
 
-}
+};
 
 void input_report_key(struct input_dev *dev, 
                       const signed char BTN, 
@@ -51,7 +51,7 @@ void usb_kill_urb(struct urb *urb)
 }
 
 struct usb_interface {
-}
+};
 
 struct usb_device interface_to_usbdev(struct usb_interface)
 {
@@ -60,8 +60,8 @@ struct usb_device interface_to_usbdev(struct usb_interface)
 
 struct usb_host_interface {
 
-}
+};
 
 struct usb_endpoint_descriptor {
 
-}
+};
