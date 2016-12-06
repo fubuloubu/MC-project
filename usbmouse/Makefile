@@ -10,7 +10,11 @@ usbmouse.bc: usbmouse.c
 	@echo "  CLANG usbmouse"
 	@clang $(BCFLAGS) -o $@ $^
 
+usbmouse-modified.bc: usbmouse-modified.c
+	@echo "  CLANG usbmouse"
+	@clang -emit-llvm -c -o $@ $^
+
 .PHONY: clean
 clean:
 	@echo "  CLEAN usbmouse"
-	@rm -f usbmouse.bc 
+	@rm -f usbmouse*.bc 
