@@ -9,7 +9,7 @@ CONTAINER_EXISTS=$(shell $(DOCKER) images | grep "$(subst :, *,$(CONTAINER_NAME)
 build:
 	@echo " BUILD $(CONTAINER_NAME)"
 	@$(if $(CONTAINER_EXISTS),$(DOCKER) rmi $(CONTAINER_NAME) >$(IGNORE))
-	@$(DOCKER) build -t "$(CONTAINER_NAME)" . >$(IGNORE)
+	@$(DOCKER) build -t "$(CONTAINER_NAME)" .
 
 START_DIR=$(shell pwd)
 TARGET_DIR=/home/klee/test
