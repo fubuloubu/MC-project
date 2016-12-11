@@ -83,7 +83,7 @@ class MetricContainer(object):
     # Return a list of metrics
     def get_metric_list(self, metric_name_list):
         metric_name_list = self.check_glob(metric_name_list)
-        return map(self.get_metric, metric_name_list)
+        return list(map(self.get_metric, metric_name_list))
         
     # Return all metric objects if no filter is applied, also allows overriding behavior
     def get_all_metrics(self):
@@ -92,7 +92,7 @@ class MetricContainer(object):
     # Return titles for a list of metrics
     def get_title_list(self, metric_name_list):
         metric_name_list = self.check_glob(metric_name_list)
-        return map(self.get_title, metric_name_list)
+        return list(map(self.get_title, metric_name_list))
         
     # Return all data if no filter is applied, also allows overriding behavior
     def get_all_titles(self):
@@ -101,7 +101,7 @@ class MetricContainer(object):
     # Return a list of metric data
     def get_data_list(self, metric_name_list):
         metric_name_list = self.check_glob(metric_name_list)
-        return map(self.get_data, metric_name_list)
+        return list(map(self.get_data, metric_name_list))
         
     # Return all data if no filter is applied, also allows overriding behavior
     def get_all_data(self):
@@ -126,7 +126,7 @@ class MetricContainer(object):
     # Compare a set of metrics
     def compare_metric_list(self, metric_name_list, another_instance, compare_func=lambda x, y: x != y):
         metric_name_list = self.check_glob(metric_name_list)
-        return map(lambda x: self.compare_metric(x, another_instance, compare_func), metric_name_list)
+        return list(map(lambda x: self.compare_metric(x, another_instance, compare_func), metric_name_list))
     
     # Compare all metrics
     def compare_all_metrics(self, another_instance, compare_func=lambda x, y: x != y):
