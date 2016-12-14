@@ -16,7 +16,7 @@ static inline void kfree(void *p)
 }
 
 /* Assuming big endian */
-#define le16_to_cpu(x) (( __u16)(__le16)(x))
+#define le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
 
 /* Should be in stdlib:
  * strlcpy()
