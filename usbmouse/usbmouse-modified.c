@@ -2,6 +2,7 @@
 #include "usbmouse-input.c"
 #include "usbmouse-usb.c"
 #include "usbmouse-utils.c"
+#include "usbmouse-macros.c"
 
 struct usb_mouse {
 	char name[128];
