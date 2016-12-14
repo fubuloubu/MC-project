@@ -1,6 +1,5 @@
 /* INCLUDED FOR COMPILATION OF EXTRACTED DRIVER */
 #include "usbmouse-utils.c"
-#include "usbmouse-macros.c"
 #include "usbmouse-input.c"
 #include "usbmouse-usb.c"
 
