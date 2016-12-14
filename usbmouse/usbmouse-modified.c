@@ -1,5 +1,7 @@
 /* INCLUDED FOR COMPILATION OF EXTRACTED DRIVER */
-#include "usbmouse-helper.c"
+#include "usbmouse-input.c"
+#include "usbmouse-usb.c"
+#include "usbmouse-utils.c"
 
 struct usb_mouse {
 	char name[128];
