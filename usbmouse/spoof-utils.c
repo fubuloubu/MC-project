@@ -1,6 +1,91 @@
+#ifndef UTILS_C
+#define UTILS_C
+
+#include <stdlib.h>
+#include <string.h>
+
+/* From list.h */
+// Doubly linked list
+struct list_head {
+    struct list_head *next, *prev;
+};
+static inline void INIT_LIST_HEAD(struct list_head *list)
+{
+    list->next = list;
+    list->prev = list;
+}
+
+/* Modified from atomic.h */
+typedef struct {
+    int counter;
+} atomic_t;
+static inline int atomic_get(atomic_t *v)
+{
+    return v->counter;
+}
+static inline void atomic_set(atomic_t *v, int i)
+{
+    v->counter = i;
+}
+static inline void atomic_inc(atomic_t *v)
+{
+    v->counter++;
+}
+/* Macro should produce:
+ * asm volatile(LOCK_PREFIX "incl %0" : "+m" (v->counter));
+ * LOCK_PREFIX "\n\tlock; "
+ * lock; incl 
+ * Same with:
+ */
+static inline void atomic_dec(atomic_t *v)
+{
+    v->counter--;
+}
+
+/* from kref.h */
+struct kref {
+    atomic_t refcount;
+};
+static inline void kref_init(struct kref *kref)
+{
+    atomic_set(&kref->refcount, 1);
+}
+static inline int kref_put(struct kref *kref, void (*release)(struct kref *kref))
+{
+    // Old
+    //return kref_sub(kref, 1, release);
+    
+    // Give this a shot...
+    if (atomic_get(&kref->refcount) > 1) {
+        atomic_dec(&kref->refcount);
+        release(kref);
+        return 1;
+    } else {
+        atomic_dec(&kref->refcount);
+        return 0;
+    }
+}
+
 /* Copied from kernel.h */
 typedef unsigned long long dma_addr_t;
 
+//#define GFP_ATOMIC 0x1001
+// Used to be ((( gfp_t)0x20u)|(( gfp_t)0x80000u)|(( gfp_t)0x2000000u))
+//#define GFP_KERNEL 0x1002
+// Used to be ((( gfp_t)(0x400000u|0x2000000u)) | (( gfp_t)0x40u) | (( gfp_t)0x80u))
+
+typedef enum {
+    GFP_KERNEL,
+    GFP_ATOMIC,
+} gfp_t;
+
+//extern void *__kmalloc_fake;
+static inline void *kmalloc(size_t s, gfp_t gfp)
+{
+    // if (__kmalloc_fake)
+    //    return __kmalloc_fake;
+    return malloc(s);
+}
 static inline void *kzalloc(size_t s, gfp_t gfp)
 {
     /* Ignoring gfp implementation details */
@@ -47,9 +132,6 @@ static inline void kfree(void *p)
 #define REL_Y       0x01
 #define REL_WHEEL   0x08
 
-#define GFP_ATOMIC  ((( gfp_t)0x20u)|(( gfp_t)0x80000u)|(( gfp_t)0x2000000u))
-#define GFP_KERNEL  ((( gfp_t)(0x400000u|0x2000000u)) | (( gfp_t)0x40u) | (( gfp_t)0x80u))
-
 #define BITMASK(VAL) (1UL << ((VAL) % 64))
 #define BITWORD(VAL) ((VAL) / 64)
 #define EV_KEY      0x01
@@ -59,3 +141,6 @@ static inline void kfree(void *p)
 
 //Not sure if necessary
 //#define NULL ((void *)0)
+
+//UTILS_C
+#endif
