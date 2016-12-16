@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef unsigned short __u16;
+
 /* From list.h */
 // Doubly linked list
 struct list_head {
@@ -27,6 +29,7 @@ static inline void atomic_set(atomic_t *v, int i)
 {
     v->counter = i;
 }
+#define ATOMIC_INIT(i) { i }
 static inline void atomic_inc(atomic_t *v)
 {
     v->counter++;
@@ -41,6 +44,52 @@ static inline void atomic_dec(atomic_t *v)
 {
     v->counter--;
 }
+
+/* From spinlock_types(_up).h */
+typedef struct {
+    volatile unsigned int slock;
+} arch_spinlock_t;
+
+typedef struct raw_spinlock {
+    arch_spinlock_t raw_lock;
+    /* Some other debug stuff taken out... */
+} raw_spinlock_t;
+
+typedef struct spinlock {
+    union {
+        struct raw_spinlock rlock;
+        /* Some other debug stuff taken out... */
+    };
+} spinlock_t;
+#define __RAW_SPIN_LOCK_INITIALIZER(lockname)   \
+{                                               \
+    .raw_lock = __ARCH_SPIN_LOCK_UNLOCKED,      \
+    SPIN_DEBUG_INIT(lockname)                   \
+    SPIN_DEP_MAP_INIT(lockname)                 \
+}
+
+# define raw_spin_lock_init(lock)               \
+do { *(lock) = __RAW_SPIN_LOCK_UNLOCKED(lock); } while (0)
+
+static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *lock)
+{
+    return &lock->rlock;
+}
+
+#define spin_lock_init(_lock)               \
+do {                                        \
+    spinlock_check(_lock);                  \
+    raw_spin_lock_init(&(_lock)->rlock);    \
+} while (0)
+
+/* From mutex.h */
+struct mutex {
+    /* 1: unlocked, 0: locked, negative: locked, possible waiters */
+    atomic_t count;
+    spinlock_t wait_lock;
+    struct list_head wait_list;
+};
+void mutex_init(struct mutex);
 
 /* from kref.h */
 struct kref {
