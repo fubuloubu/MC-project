@@ -17,4 +17,4 @@ all:
 	mv .tmp_usbmouse.s usbmouse.s
 clean:
 	$(MAKE) -C $(BUILDIR) M=$(PWD) clean
-	rm *.i
+	rm -f *.i
