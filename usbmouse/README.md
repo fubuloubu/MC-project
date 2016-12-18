@@ -8,7 +8,9 @@ This directory contains some of the intial prototyping work completed to help us
 Line 36: 
 Changed #include "../hid-ids.h" to #include "hid-ids.h"
 
-Added hid-ids.h from linux source tree
+Removed static keyword for all usb\_mouse\_\* functions
+
+Copied hid-ids.h from linux source tree
 
 run `make usbmouse.bc` to generate bytecode for use in tools
 run `make clean` to clean this directory
