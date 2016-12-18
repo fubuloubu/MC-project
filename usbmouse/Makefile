@@ -17,4 +17,6 @@ status:
 clean:
 	@echo "  CLEAN usbmouse"
 	@rm -f *-preprocessed.c 
+	@rm -f *.i
+	@rm -f *.s
 	@rm -f *.bc 
