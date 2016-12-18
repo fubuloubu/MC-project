@@ -16,5 +16,5 @@ status:
 .PHONY: clean
 clean:
 	@echo "  CLEAN usbmouse"
-	@rm -f *-preprocessed.bc 
+	@rm -f *-preprocessed.c 
 	@rm -f *.bc 
