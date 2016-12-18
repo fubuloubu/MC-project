@@ -1,10 +1,10 @@
 include bcflags.mk
 
-%-preprocessed.c: %.c
+%.i: %.c
 	@echo "  CLANG -E $^"
 	@clang $(BCFLAGS) -E $^ > $@
 
-%.bc: %-preprocessed.c
+%.bc: %.i
 	@echo "  CLANG -c $^"
 	@clang -emit-llvm -c $^ -o $@
 
