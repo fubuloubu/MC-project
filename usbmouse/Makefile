@@ -1,18 +1,12 @@
 include bcflags.mk
 
-# Compiler stage (originally -c)
-BCFLAGS+=-c
+%-preprocessed.c: %.c
+	@echo "  CLANG -E $^"
+	@clang $(BCFLAGS) -E $^ > $@
 
-# Generate Bytecode (and store in file -o)
-BCFLAGS+=-emit-llvm
-
-usbmouse.bc: usbmouse.c
-	@echo "  CLANG usbmouse"
-	@clang $(BCFLAGS) -o $@ $^
-
-usbmouse-modified.bc: usbmouse-modified.c
-	@echo "  CLANG usbmouse"
-	@clang -emit-llvm -c -o $@ $^
+%.bc: %-preprocessed.c
+	@echo "  CLANG -c $^"
+	@clang -emit-llvm -c $^ -o $@
 
 # Doing it this way instead of symlink to Makefile above
 .PHONY: status
@@ -22,4 +16,5 @@ status:
 .PHONY: clean
 clean:
 	@echo "  CLEAN usbmouse"
-	@rm -f usbmouse*.bc 
+	@rm -f *-preprocessed.bc 
+	@rm -f *.bc 
