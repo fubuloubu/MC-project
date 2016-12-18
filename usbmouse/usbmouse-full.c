@@ -36881,7 +36881,7 @@ struct usb_mouse {
  dma_addr_t data_dma;
 };
 
-static void usb_mouse_irq(struct urb *urb)
+void usb_mouse_irq(struct urb *urb)
 {
  struct usb_mouse *mouse = urb->context;
  signed char *data = mouse->data;
@@ -36920,7 +36920,7 @@ resubmit:
    mouse->usbdev->devpath, status);
 }
 
-static int usb_mouse_open(struct input_dev *dev)
+int usb_mouse_open(struct input_dev *dev)
 {
  struct usb_mouse *mouse = input_get_drvdata(dev);
 
@@ -36931,14 +36931,14 @@ static int usb_mouse_open(struct input_dev *dev)
  return 0;
 }
 
-static void usb_mouse_close(struct input_dev *dev)
+void usb_mouse_close(struct input_dev *dev)
 {
  struct usb_mouse *mouse = input_get_drvdata(dev);
 
  usb_kill_urb(mouse->irq);
 }
 
-static int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_id *id)
+int usb_mouse_probe(struct usb_interface *intf, const struct usb_device_id *id)
 {
  struct usb_device *dev = interface_to_usbdev(intf);
  struct usb_host_interface *interface;
@@ -37035,7 +37035,7 @@ fail1:
  return error;
 }
 
-static void usb_mouse_disconnect(struct usb_interface *intf)
+void usb_mouse_disconnect(struct usb_interface *intf)
 {
  struct usb_mouse *mouse = usb_get_intfdata (intf);
 
