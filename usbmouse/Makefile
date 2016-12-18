@@ -1,22 +1,20 @@
-include bcflags.mk
+obj-m := usbmouse.o
 
-%.i: %.c
-	@echo "  CLANG -E $^"
-	@clang $(BCFLAGS) -E $^ > $@
+# Added so that preprocessor and assembly objects
+# get saved in current directory
+EXTRA_CFLAGS += -save-temps=obj
+# Undefine this macro so the "asm goto..."
+# optimizations are removed, since clang can't parse them
+EXTRA_CFLAGS += -UCC_HAVE_ASM_GOTO
 
-%.bc: %.i
-	@echo "  CLANG -c $^"
-	@clang -emit-llvm -c $^ -o $@
+BUILDIR=/lib/modules/$(shell uname -r)/build
+PWD=$(shell pwd)
 
-# Doing it this way instead of symlink to Makefile above
-.PHONY: status
-status:
-	@$(MAKE) -f ../Makefile status
-
-.PHONY: clean
+all:
+	$(MAKE) -C $(BUILDIR) M=$(PWD) modules
+	# Some files went under weird names...
+	mv .tmp_usbmouse.i usbmouse.i
+	mv .tmp_usbmouse.s usbmouse.s
 clean:
-	@echo "  CLEAN usbmouse"
-	@rm -f *-preprocessed.c 
-	@rm -f *.i
-	@rm -f *.s
-	@rm -f *.bc 
+	$(MAKE) -C $(BUILDIR) M=$(PWD) clean
+	rm *.i
