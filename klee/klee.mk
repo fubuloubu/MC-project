@@ -13,13 +13,16 @@ build:
 
 START_DIR=$(shell pwd)
 TARGET_DIR=/home/klee/test
+SOURCE_DIR=/home/klee/usbmouse
 INSTANCE_NAME=klee_test
 
 # Rule for creating environment (NOTE: keep persistant)
 .SECONDARY: $(INSTANCE_NAME)
 $(INSTANCE_NAME): $(if $(CONTAINER_EXISTS),,build)
 	@echo " CREATE $(INSTANCE_NAME)"
-	@$(DOCKER) run -v $(shell pwd):$(TARGET_DIR) \
+	@$(DOCKER) run \
+		-v $(shell pwd):$(TARGET_DIR) \
+		-v $(shell pwd)/../usbmouse:$(SOURCE_DIR) \
 		-it -d --name=$(INSTANCE_NAME) $(CONTAINER_NAME) \
 		2>$(IGNORE) >$(IGNORE)
 	@touch $@
@@ -27,25 +30,27 @@ $(INSTANCE_NAME): $(if $(CONTAINER_EXISTS),,build)
 # Command to execute inside environment
 ENV_EXECUTE=$(DOCKER) exec $(INSTANCE_NAME)
 
-# Setup clang with linux kernel flags
-#include ../usbmouse/bcflags.mk
-#CLANG_FLAGS+=$(BCFLAGS)
-
 # Setup clang to generate bytecode for use with klee
 CLANG_FLAGS+=-I /home/klee/klee_src/include/
 CLANG_FLAGS+=-emit-llvm
 CLANG_FLAGS+=-c
 CLANG=clang $(CLANG_FLAGS)
 
+# Get preprocessed source for harness from GCC
+usbmouse-harness.c: ../usbmouse/usbmouse.i $(INSTANCE_NAME)
+../usbmouse/usbmouse.i: $(INSTANCE_NAME)
+	@echo "   MAKE usbmouse"
+	@$(ENV_EXECUTE) bash -c "cd $(SOURCE_DIR) && $(MAKE) all 2>$(IGNORE) >$(IGNORE)"
+
 # Generate LLVM bytecode for use with klee
 %.bc: %.c $(INSTANCE_NAME)
 	@echo "  CLANG $<"
-	@$(ENV_EXECUTE) $(CLANG) $(TARGET_DIR)/$< -o $(TARGET_DIR)/$@
+	@$(ENV_EXECUTE) $(CLANG) $(TARGET_DIR)/$< -o $(TARGET_DIR)/$@ 2>$(IGNORE)
 
 # Setup klee to generate test cases
 KLEE_FLAGS=--libc=uclibc
 # klee can't handle this argument when there are <2 arguments
-#KLEE_FLAGS+=--posix-runtime
+KLEE_FLAGS+=--posix-runtime
 KLEE=klee $(KLEE_FLAGS)
 
 # Run klee to get test cases and execute them
@@ -68,6 +73,10 @@ destroy_env:
 # clean using executeable lines of .gitignore file
 .PHONY: clean
 clean:
-	@if [ -f $(INSTANCE_NAME) ]; then $(MAKE) -s destroy_env; fi
+	@if [ -f $(INSTANCE_NAME) ]; then \
+		echo "   MAKE clean_usbmouse"; \
+		$(ENV_EXECUTE) bash -c "cd $(SOURCE_DIR) && $(MAKE) clean >$(IGNORE)"; \
+		$(MAKE) -s destroy_env; \
+	 fi
 	@echo "  CLEAN klee/.gitignore"
 	@grep -v "#\|^\$$" .gitignore | while read line; do rm -rf $$line; done
