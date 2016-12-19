@@ -1,5 +1,8 @@
 # *usbmouse* driver prototyping work
-This directory contains some of the intial prototyping work completed to help us figure out how to build and work with the usbmouse kernel module
+This directory contains some of the intial prototyping work completed
+to help us figure out how to build and work with the usbmouse kernel module.
+
+**NOTE**: Tested using Ubuntu 16.04.1 LTS
 
 run `make all` to generate *usbmouse.i*, the pre-processed source.
 

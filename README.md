@@ -1,8 +1,6 @@
 # MC-project
 Model Checking project for CSEE E6863 Fall 2016
 
-**NOTE**: Tested using Ubuntu 16.04.1 LTS
-
 **NOTE**: Ensure you have build-essentials installed:
 ~~~~
 sudo apt install build-essentials
