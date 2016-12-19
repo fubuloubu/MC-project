@@ -1,23 +1,30 @@
-#Klee Setup
-This directory sets up the klee container used to run the klee environment
+#Klee Experiments
+This directory contains the rules for running Klee experiments
+*NOTE*: Tested using Ubuntu 16.04.1 LTS
 
-To create environment, run:
+# Instructions
+Ensure you have docker installed:
+~~~~
+sudo apt install docker
+~~~~
+
+First create docker container:
 ~~~~
 make build
 ~~~~
 
-To test enviroment, run:
+To obtain experimental results in docker container, run:
 ~~~~
-make test1.results test2.results
+make usbmouse.results
 ~~~~
+*NOTE*: This will fail
 
 To clean directory, run:
 ~~~~
 make clean
 ~~~~
-NOTE: This does not remove the created *.results* files
 
-To run experimental results in docker container, run:
+To test enviroment, run:
 ~~~~
-make usbmouse.results
+make test1.results test2.results
 ~~~~
