@@ -24,10 +24,6 @@ endef
 		); \
 	fi
 	@$(call RUN_PDFLATEX)
-	@if [ -d "$$(readlink -f ~/Downloads)" ]; then \
-		echo "  MOVE $@"; \
-		mv $@ ~/Downloads; \
-	fi;
 
 # Clean rule to remove intermediates 
 # produced by LaTeX and relevant libraries
