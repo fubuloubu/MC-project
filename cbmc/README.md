@@ -16,7 +16,7 @@ make all
 *NOTE*: usb\_mouse\_probe() will fail.
 To view failures, run:
 ~~~~
-grep FAILED usb\_mouse\_probe.results
+grep FAILED usb_mouse_probe.results
 ~~~~
 
 To clean up results, run:
