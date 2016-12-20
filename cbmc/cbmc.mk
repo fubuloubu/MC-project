@@ -13,6 +13,12 @@ all: $(addsuffix .results,$(DRIVER_METHODS))
 
 CBMC_FLAGS=
 CBMC_FLAGS+=--all-properties
+CBMC_FLAGS+=--div-by-zero-check
+CBMC_FLAGS+=--memory-leak-check
+CBMC_FLAGS+=--unsigned-overflow-check
+CBMC_FLAGS+=--signed-overflow-check
+CBMC_FLAGS+=--float-overflow-check
+CBMC_FLAGS+=--nan-check
 CBMC_FLAGS+=--depth 1000
 
 %.results: ../usbmouse/usbmouse.i
