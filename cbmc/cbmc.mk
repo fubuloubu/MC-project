@@ -12,10 +12,8 @@ DRIVER_METHODS+=usb_mouse_disconnect
 all: $(addsuffix .results,$(DRIVER_METHODS))
 
 CBMC_FLAGS=
-#CBMC_FLAGS+=--show-claims
-#CBMC_FLAGS+=--show-vcc
-CBMC_FLAGS+=--unwind 100
-CBMC_FLAGS+=--unwinding-assertions
+CBMC_FLAGS+=--all-properties
+CBMC_FLAGS+=--depth 1000
 
 %.results: ../usbmouse/usbmouse.i
 	@echo "   CBMC $*"
