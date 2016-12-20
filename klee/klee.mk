@@ -49,14 +49,12 @@ usbmouse-harness.c: ../usbmouse/usbmouse.i $(INSTANCE_NAME)
 
 # Setup klee to generate test cases
 KLEE_FLAGS=--libc=uclibc
-# klee can't handle this argument when there are <2 arguments
-KLEE_FLAGS+=--posix-runtime
 KLEE=klee $(KLEE_FLAGS)
 
 # Run klee to get test cases and execute them
 %.results: %.bc $(INSTANCE_NAME)
 	@echo "   KLEE $<"
-	@$(ENV_EXECUTE) $(KLEE) $(TARGET_DIR)/$< 2>$(IGNORE)
+	@$(ENV_EXECUTE) $(KLEE) $(TARGET_DIR)/$<
 	@cd klee-out-0 && for file in test*.ktest; do \
 		$(ENV_EXECUTE) ktest-tool $(TARGET_DIR)/klee-last/$$file >> $@; \
 	 done
