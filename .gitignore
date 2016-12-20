@@ -24,3 +24,6 @@ _minted-*/
 
 # Python
 *.pyc
+
+# Experimental Results
+*.results
