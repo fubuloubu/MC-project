@@ -13,6 +13,12 @@ To obtain results for all 5 function calls in usbmouse, run:
 make all
 ~~~~
 
+*NOTE*: usb\_mouse\_probe() will fail.
+To view failures, run:
+~~~~
+grep FAILED usb\_mouse\_probe.results
+~~~~
+
 To clean up results, run:
 ~~~~
 make clean
