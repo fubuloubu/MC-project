@@ -22,7 +22,7 @@ llbmc --version
 Generating usbmouse.bc(go to usbmouse folder and run)
 ~~~~
 make
-clang -w -c -g -I. -emit-llvm usbmouse.i -o usbmouse.bc
+![clang -w -c -g -I. -emit-llvm usbmouse.i -o usbmouse.bc](https://github.com/fubuloubu/MC-project/blob/master/llbmc-2013.1-Linux_64/images/Generating_usbmouse_bc.png)
 ~~~~
 
 Running Test cases to do verification of code(Please check the images for the respective reults)
